@@ -102,7 +102,7 @@ export class DatabaseManager {
       `;
 
       const result = await session.run(query, { entityName });
-      return this.parseEmissionFactors(result);
+      return this.parseEmissionFactors(result as any);
     } finally {
       await session.close();
     }
