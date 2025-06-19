@@ -17,7 +17,7 @@
       "maxDuration": 30
     }
   },
-  "regions": ["hnd1", "iad1"],
+  
   "cleanUrls": true,
   "trailingSlash": false,
   "headers": [
