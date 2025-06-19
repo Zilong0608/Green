@@ -97,8 +97,7 @@
     },
 
     responses: {
-      welcome: 'Hello! I\'m an intelligent carbon emission assessment system. You can tell me about your activities
-   and I\'ll help calculate carbon emissions.',
+      welcome: 'Hello! I\'m an intelligent carbon emission assessment system. You can tell me about your activities and I\'ll help calculate carbon emissions.',
       noData: 'No relevant data found',
       calculating: 'Calculating carbon emissions...',
       analysing: 'Analyzing your input...',
