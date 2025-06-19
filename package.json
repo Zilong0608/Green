@@ -1,0 +1,52 @@
+{
+  "name": "green-carbon-assessment",
+  "version": "1.0.0",
+  "description": "智能碳排放评估系统 - Agentic Carbon Emission Assessment System",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next dev -p 3010",
+    "build": "next build",
+    "start": "next start -p 3010",
+    "lint": "next lint",
+    "test": "jest"
+  },
+  "dependencies": {
+    "next": "^14.0.0",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "neo4j-driver": "^5.15.0",
+    "@google/generative-ai": "^0.7.0",
+    "i18next": "^23.7.0",
+    "react-i18next": "^13.5.0",
+    "i18next-browser-languagedetector": "^7.2.0",
+    "lodash": "^4.17.21",
+    "uuid": "^9.0.1",
+    "styled-components": "^6.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "@types/lodash": "^4.14.202",
+    "@types/uuid": "^9.0.7",
+    "typescript": "^5.0.0",
+    "eslint": "^8.0.0",
+    "eslint-config-next": "^14.0.0",
+    "jest": "^29.7.0",
+    "@testing-library/react": "^14.1.0",
+    "@testing-library/jest-dom": "^6.1.0"
+  },
+  "keywords": [
+    "carbon-emission",
+    "agentic-system",
+    "neo4j",
+    "ai",
+    "sustainability",
+    "green-tech"
+  ],
+  "author": "Green Development Team",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

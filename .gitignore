@@ -1,0 +1,90 @@
+# 依赖
+/node_modules
+/.pnp
+.pnp.js
+
+# 测试
+/coverage
+
+# Next.js
+/.next/
+/out/
+
+# 生产构建
+/build
+
+# 环境变量
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# 调试
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# 本地环境文件
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# 操作系统
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# 日志
+logs
+*.log
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# 临时文件
+lib-cov
+coverage
+.grunt
+.cache
+.tmp
+.temp
+
+# 可选的 npm 缓存目录
+.npm
+
+# ESLint 缓存
+.eslintcache
+
+# Styled Components
+.next/static/css/
+
+# Jest
+coverage/
+
+# Storybook
+.out
+.storybook-out
+
+# 测试文件
+test_connection.py
