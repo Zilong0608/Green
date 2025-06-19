@@ -5,7 +5,6 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
-import { useTranslation } from 'react-i18next';
 import styled from 'styled-components';
 import { SystemResponse } from '@/types';
 
@@ -19,15 +18,33 @@ interface Message {
 
 const ChatInterface: React.FC = () => {
   // 确保 i18next 已初始化
-  const [i18nReady, setI18nReady] = useState(false);
+  
 
-  useEffect(() => {
-    import('@/utils/i18n').then(() => {
-      setI18nReady(true);
-    });
-  }, []);
+  
 
-  const { t, i18n } = useTranslation();  const [messages, setMessages] = useState<Message[]>([]);
+  // 临时硬编码文本，移除i18n
+  const t = (key: string) => {
+    const texts: any = {
+      'ui.title': 'Green - 智能碳排放评估',
+      'ui.subtitle': '基于AI的个人碳足迹计算助手',
+      'ui.inputPlaceholder': '请描述您的活动，如：我今天吃了100g苹果...',
+      'ui.sendButton': '发送',
+      'ui.clearButton': '清空对话',
+      'ui.exampleTitle': '示例查询：',
+      'responses.welcome': '您好！我是智能碳排放评估系统。您可以告诉我您的活动，我来帮您计算碳排放量。',
+      'common.processing': '处理中...',
+      'errors.networkError': '网络连接错误，请检查网络后重试',
+      'responses.total': '总计',
+      'responses.emissionFactor': '排放因子',
+      'responses.source': '数据来源',
+      'responses.classification': '分类路径',
+      'responses.suggestions': '建议'
+    };
+    return texts[key] || key;
+  };
+
+  const i18n = { language: 'zh', changeLanguage: () => {} }; 
+  const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isClient, setIsClient] = useState(false);
@@ -200,21 +217,15 @@ const ChatInterface: React.FC = () => {
         <ExampleQueries>
           <ExampleTitle>{t('ui.exampleTitle')}</ExampleTitle>
           <ExampleList>
-            {Array.isArray(t('ui.examples', { returnObjects: true }))
-    ? (t('ui.examples', { returnObjects: true }) as string[]).map((example, index) => (
-        <ExampleItem
-          key={index}
-          onClick={() => handleExampleClick(example)}
-        >
-          {example}
-        </ExampleItem>
-      ))
-    : ['示例查询加载中...'].map((example, index) => (
-        <ExampleItem key={index}>
-          {example}
-        </ExampleItem>
-      ))
-  }
+           {['我今天吃了100g苹果', '开车去上班，距离15公里', '喝了一杯咖啡和一个面包', '用了3小时电脑'].map((example, index)
+   => (
+    <ExampleItem
+      key={index}
+      onClick={() => handleExampleClick(example)}
+    >
+      {example}
+    </ExampleItem>
+  ))}
           </ExampleList>
         </ExampleQueries>
 
