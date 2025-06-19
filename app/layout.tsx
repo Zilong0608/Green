@@ -5,6 +5,7 @@
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import './globals.css';
+import StyledComponentsRegistry from './registry';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -61,9 +62,9 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
       <body className={inter.className}>
-        <div id="root">
+        <StyledComponentsRegistry>
           {children}
-        </div>
+        </StyledComponentsRegistry>
       </body>
     </html>
   );

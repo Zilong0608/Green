@@ -142,7 +142,10 @@ const ChatInterface: React.FC = () => {
     setInputText(example);
     inputRef.current?.focus();
   };
-
+  // 防止水合错误
+  if (!isClient) {
+    return <div>Loading...</div>;
+  }	
   return (
     <Container>
       <Header>
