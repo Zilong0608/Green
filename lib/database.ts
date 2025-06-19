@@ -8,7 +8,7 @@
  * - 连接池管理和错误处理
  */
 
-import neo4j, { Driver, Session, Result, Record } from 'neo4j-driver';
+import neo4j, { Driver, Session, QueryResult, Record, RecordShape } from 'neo4j-driver';
 import { EmissionFactor, Neo4jQueryParams, SystemError } from '@/types';
 
 export class DatabaseManager {
@@ -324,7 +324,7 @@ export class DatabaseManager {
   /**
    * 解析查询结果为 EmissionFactor 对象
    */
-  private parseEmissionFactors(result: Result): EmissionFactor[] {
+  private parseEmissionFactors(result: QueryResult<RecordShape>): EmissionFactor[] {
     return result.records.map(record => ({
       id: record.get('id'),
       title: record.get('title'),
