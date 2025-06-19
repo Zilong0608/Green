@@ -4,14 +4,7 @@
   "framework": "nextjs",
   "installCommand": "npm install",
   "devCommand": "npm run dev",
-  "env": {
-    "NEO4J_URI": "@neo4j_uri",
-    "NEO4J_USERNAME": "@neo4j_username", 
-    "NEO4J_PASSWORD": "@neo4j_password",
-    "NEO4J_DATABASE": "@neo4j_database",
-    "GEMINI_API_KEY": "@gemini_api_key"
-  },
-  "functions": {
+    "functions": {
     "app/api/**/*.ts": {
       "runtime": "nodejs18.x",
       "maxDuration": 30
