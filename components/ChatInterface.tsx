@@ -18,8 +18,16 @@ interface Message {
 }
 
 const ChatInterface: React.FC = () => {
-  const { t, i18n } = useTranslation();
-  const [messages, setMessages] = useState<Message[]>([]);
+  // 确保 i18next 已初始化
+  const [i18nReady, setI18nReady] = useState(false);
+
+  useEffect(() => {
+    import('@/utils/i18n').then(() => {
+      setI18nReady(true);
+    });
+  }, []);
+
+  const { t, i18n } = useTranslation();  const [messages, setMessages] = useState<Message[]>([]);
   const [inputText, setInputText] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isClient, setIsClient] = useState(false);
