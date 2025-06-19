@@ -192,14 +192,21 @@ const ChatInterface: React.FC = () => {
         <ExampleQueries>
           <ExampleTitle>{t('ui.exampleTitle')}</ExampleTitle>
           <ExampleList>
-            {(t('ui.examples', { returnObjects: true }) as string[]).map((example, index) => (
-              <ExampleItem
-                key={index}
-                onClick={() => handleExampleClick(example)}
-              >
-                {example}
-              </ExampleItem>
-            ))}
+            {Array.isArray(t('ui.examples', { returnObjects: true }))
+    ? (t('ui.examples', { returnObjects: true }) as string[]).map((example, index) => (
+        <ExampleItem
+          key={index}
+          onClick={() => handleExampleClick(example)}
+        >
+          {example}
+        </ExampleItem>
+      ))
+    : ['示例查询加载中...'].map((example, index) => (
+        <ExampleItem key={index}>
+          {example}
+        </ExampleItem>
+      ))
+  }
           </ExampleList>
         </ExampleQueries>
 
