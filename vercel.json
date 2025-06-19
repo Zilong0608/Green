@@ -25,13 +25,7 @@
       ]
     }
   ],
-  "redirects": [
-    {
-      "source": "/",
-      "destination": "/",
-      "permanent": false
-    }
-  ],
+  
   "rewrites": [
     {
       "source": "/health",
