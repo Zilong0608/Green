@@ -194,3 +194,7 @@ i18next
   });
 
 export default i18next;
+// 确保在客户端环境下初始化
+  if (typeof window !== 'undefined') {
+    i18next.init();
+  }
