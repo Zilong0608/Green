@@ -26,10 +26,8 @@
 
     useEffect(() => {
       if (messages.length === 0) {
-        const welcomeText = language === 'zh'
-          ? '您好！我是智能碳排放评估系统。您可以告诉我您的活动，我来帮您计算碳排放量。'
-          : 'Hello! I am an intelligent carbon emission assessment system. You can tell me about your activities
-  and I will help calculate carbon emissions.';
+        const welcomeText = language === 'zh' ?
+  '您好！我是智能碳排放评估系统。您可以告诉我您的活动，我来帮您计算碳排放量。' : 'Hello! I am an intelligent carbon emission assessment system. You can tell me about your activities and I will help calculate carbon emissions.';
 
         const welcomeMessage: Message = {
           id: 'welcome',
@@ -89,9 +87,8 @@
         setMessages(prev => [...prev, systemMessage]);
       } catch (error) {
         console.error('发送消息失败:', error);
-        const errorText = language === 'zh'
-          ? '网络连接错误，请检查网络后重试'
-          : 'Network connection error, please check and retry';
+        const errorText = language === 'zh' ? '网络连接错误，请检查网络后重试' : 'Network connection error, please
+  check and retry';
 
         const errorMessage: Message = {
           id: (Date.now() + 1).toString(),
@@ -108,10 +105,9 @@
     const handleClearMessages = () => {
       setMessages([]);
       setTimeout(() => {
-        const welcomeText = language === 'zh'
-          ? '您好！我是智能碳排放评估系统。您可以告诉我您的活动，我来帮您计算碳排放量。'
-          : 'Hello! I am an intelligent carbon emission assessment system. You can tell me about your activities
-  and I will help calculate carbon emissions.';
+        const welcomeText = language === 'zh' ?
+  '您好！我是智能碳排放评估系统。您可以告诉我您的活动，我来帮您计算碳排放量。' : 'Hello! I am an intelligent carbon
+   emission assessment system. You can tell me about your activities and I will help calculate carbon emissions.';
 
         const welcomeMessage: Message = {
           id: 'welcome-new',
@@ -132,7 +128,9 @@
 
     const handleExampleClick = (example: string) => {
       setInputText(example);
-      inputRef.current?.focus();
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
     };
 
     if (!isClient) {
@@ -150,10 +148,9 @@
     const exampleTitle = language === 'zh' ? '示例查询：' : 'Example Queries:';
     const langButtonText = language === 'zh' ? 'English' : '中文';
 
-    const examples = language === 'zh'
-      ? ['我今天吃了100g苹果', '开车去上班，距离15公里', '喝了一杯咖啡和一个面包', '用了3小时电脑']
-      : ['I ate 100g apple today', 'Drove to work, 15 kilometers', 'Had a cup of coffee and a bread', 'Used
-  computer for 3 hours'];
+    const examples = language === 'zh' ? ['我今天吃了100g苹果', '开车去上班，距离15公里', '喝了一杯咖啡和一个面包',
+   '用了3小时电脑'] : ['I ate 100g apple today', 'Drove to work, 15 kilometers', 'Had a cup of coffee and a bread',
+   'Used computer for 3 hours'];
 
     return (
       <Container>
@@ -271,7 +268,6 @@
     );
   };
 
-  // 样式组件
   const Container = styled.div`
     display: flex;
     flex-direction: column;
