@@ -26,8 +26,10 @@
 
     useEffect(() => {
       if (messages.length === 0) {
-        const welcomeText = language === 'zh' ?
-  '您好！我是智能碳排放评估系统。您可以告诉我您的活动，我来帮您计算碳排放量。' : 'Hello! I am an intelligent carbon emission assessment system. You can tell me about your activities and I will help calculate carbon emissions.';
+        let welcomeText = '您好！我是智能碳排放评估系统。';
+        if (language === 'en') {
+          welcomeText = 'Hello! I am an intelligent carbon emission assessment system.';
+        }
 
         const welcomeMessage: Message = {
           id: 'welcome',
@@ -87,8 +89,10 @@
         setMessages(prev => [...prev, systemMessage]);
       } catch (error) {
         console.error('发送消息失败:', error);
-        const errorText = language === 'zh' ? '网络连接错误，请检查网络后重试' : 'Network connection error, please
-  check and retry';
+        let errorText = '网络连接错误';
+        if (language === 'en') {
+          errorText = 'Network connection error';
+        }
 
         const errorMessage: Message = {
           id: (Date.now() + 1).toString(),
@@ -105,9 +109,10 @@
     const handleClearMessages = () => {
       setMessages([]);
       setTimeout(() => {
-        const welcomeText = language === 'zh' ?
-  '您好！我是智能碳排放评估系统。您可以告诉我您的活动，我来帮您计算碳排放量。' : 'Hello! I am an intelligent carbon
-   emission assessment system. You can tell me about your activities and I will help calculate carbon emissions.';
+        let welcomeText = '您好！我是智能碳排放评估系统。';
+        if (language === 'en') {
+          welcomeText = 'Hello! I am an intelligent carbon emission assessment system.';
+        }
 
         const welcomeMessage: Message = {
           id: 'welcome-new',
@@ -137,20 +142,19 @@
       return <div>Loading...</div>;
     }
 
-    const title = language === 'zh' ? 'Green - 智能碳排放评估' : 'Green - Intelligent Carbon Emission Assessment';
-    const subtitle = language === 'zh' ? '基于AI的个人碳足迹计算助手' : 'AI-powered Personal Carbon Footprint
-  Calculator';
-    const placeholder = language === 'zh' ? '请描述您的活动，如：我今天吃了100g苹果...' : 'Describe your
-  activities, e.g.: I ate 100g apple today...';
+    const title = language === 'zh' ? 'Green - 智能碳排放评估' : 'Green - Carbon Assessment';
+    const subtitle = language === 'zh' ? '基于AI的个人碳足迹计算助手' : 'AI-powered Carbon Calculator';
+    const placeholder = language === 'zh' ? '请描述您的活动' : 'Describe your activities';
     const sendText = language === 'zh' ? '发送' : 'Send';
-    const clearText = language === 'zh' ? '清空对话' : 'Clear Conversation';
+    const clearText = language === 'zh' ? '清空对话' : 'Clear';
     const processingText = language === 'zh' ? '处理中...' : 'Processing...';
-    const exampleTitle = language === 'zh' ? '示例查询：' : 'Example Queries:';
+    const exampleTitle = language === 'zh' ? '示例查询：' : 'Examples:';
     const langButtonText = language === 'zh' ? 'English' : '中文';
 
-    const examples = language === 'zh' ? ['我今天吃了100g苹果', '开车去上班，距离15公里', '喝了一杯咖啡和一个面包',
-   '用了3小时电脑'] : ['I ate 100g apple today', 'Drove to work, 15 kilometers', 'Had a cup of coffee and a bread',
-   'Used computer for 3 hours'];
+    let examples = ['我今天吃了100g苹果', '开车15公里', '喝了一杯咖啡', '用了3小时电脑'];
+    if (language === 'en') {
+      examples = ['I ate 100g apple', 'Drove 15km', 'Had a coffee', 'Used computer 3 hours'];
+    }
 
     return (
       <Container>
@@ -241,7 +245,7 @@
 
             {result.emissionFactor && (
               <div style={{ fontSize: '0.9rem', color: '#555' }}>
-                <div>🏭 {language === 'zh' ? '排放因子' : 'Emission Factor'}: {result.emissionFactor.factor}
+                <div>🏭 {language === 'zh' ? '排放因子' : 'Factor'}: {result.emissionFactor.factor}
   {result.emissionFactor.unit}</div>
                 <div>📚 {language === 'zh' ? '数据来源' : 'Source'}: {result.emissionFactor.source}</div>
                 <div>🏷️ {language === 'zh' ? '分类' : 'Category'}: {result.emissionFactor.sector}</div>
