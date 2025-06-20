@@ -20,63 +20,63 @@
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLTextAreaElement>(null);
 
-    // 语言配置
-    const translations = {
-      zh: {
-        'ui.title': 'Green - 智能碳排放评估',
-        'ui.subtitle': '基于AI的个人碳足迹计算助手',
-        'ui.inputPlaceholder': '请描述您的活动，如：我今天吃了100g苹果...',
-        'ui.sendButton': '发送',
-        'ui.clearButton': '清空对话',
-        'ui.exampleTitle': '示例查询：',
-        'ui.languageSwitch': 'English',
-        'responses.welcome': '您好！我是智能碳排放评估系统。您可以告诉我您的活动，我来帮您计算碳排放量。',
-        'common.processing': '处理中...',
-        'errors.networkError': '网络连接错误，请检查网络后重试',
-        'responses.total': '总计',
-        'responses.emissionFactor': '排放因子',
-        'responses.source': '数据来源',
-        'responses.classification': '分类路径',
-        'responses.suggestions': '建议',
-        'examples': [
-          '我今天吃了100g苹果',
-          '开车去上班，距离15公里',
-          '喝了一杯咖啡和一个面包',
-          '用了3小时电脑'
-        ]
-      },
-      en: {
-        'ui.title': 'Green - Intelligent Carbon Emission Assessment',
-        'ui.subtitle': 'AI-powered Personal Carbon Footprint Calculator',
-        'ui.inputPlaceholder': 'Describe your activities, e.g.: I ate 100g apple today...',
-        'ui.sendButton': 'Send',
-        'ui.clearButton': 'Clear Conversation',
-        'ui.exampleTitle': 'Example Queries:',
-        'ui.languageSwitch': '中文',
-        'responses.welcome': 'Hello! I am an intelligent carbon emission assessment system. You can tell me about
-  your activities and I will help calculate carbon emissions.',
-        'common.processing': 'Processing...',
-        'errors.networkError': 'Network connection error, please check and retry',
-        'responses.total': 'Total',
-        'responses.emissionFactor': 'Emission Factor',
-        'responses.source': 'Source',
-        'responses.classification': 'Classification',
-        'responses.suggestions': 'Suggestions',
-        'examples': [
-          'I ate 100g apple today',
-          'Drove to work, 15 kilometers',
-          'Had a cup of coffee and a bread',
-          'Used computer for 3 hours'
-        ]
+    // 简化的翻译函数
+    const getText = (key: string) => {
+      const texts: { [key: string]: { [lang: string]: string } } = {
+        title: {
+          zh: 'Green - 智能碳排放评估',
+          en: 'Green - Intelligent Carbon Emission Assessment'
+        },
+        subtitle: {
+          zh: '基于AI的个人碳足迹计算助手',
+          en: 'AI-powered Personal Carbon Footprint Calculator'
+        },
+        placeholder: {
+          zh: '请描述您的活动，如：我今天吃了100g苹果...',
+          en: 'Describe your activities, e.g.: I ate 100g apple today...'
+        },
+        send: {
+          zh: '发送',
+          en: 'Send'
+        },
+        clear: {
+          zh: '清空对话',
+          en: 'Clear Conversation'
+        },
+        processing: {
+          zh: '处理中...',
+          en: 'Processing...'
+        },
+        welcome: {
+          zh: '您好！我是智能碳排放评估系统。您可以告诉我您的活动，我来帮您计算碳排放量。',
+          en: 'Hello! I am an intelligent carbon emission assessment system. You can tell me about your activities
+  and I will help calculate carbon emissions.'
+        },
+        networkError: {
+          zh: '网络连接错误，请检查网络后重试',
+          en: 'Network connection error, please check and retry'
+        },
+        exampleTitle: {
+          zh: '示例查询：',
+          en: 'Example Queries:'
+        },
+        langSwitch: {
+          zh: 'English',
+          en: '中文'
+        }
+      };
+      return texts[key]?.[language] || key;
+    };
+
+    const getExamples = () => {
+      if (language === 'zh') {
+        return ['我今天吃了100g苹果', '开车去上班，距离15公里', '喝了一杯咖啡和一个面包', '用了3小时电脑'];
+      } else {
+        return ['I ate 100g apple today', 'Drove to work, 15 kilometers', 'Had a cup of coffee and a bread', 'Used
+  computer for 3 hours'];
       }
     };
 
-    // 翻译函数
-    const t = (key: string) => {
-      return translations[language as keyof typeof translations]?.[key as keyof typeof translations.zh] || key;
-    };
-
-    // 语言切换函数
     const toggleLanguage = () => {
       const newLang = language === 'zh' ? 'en' : 'zh';
       setLanguage(newLang);
@@ -87,10 +87,6 @@
 
     useEffect(() => {
       setIsClient(true);
-    }, []);
-
-    // 初始化语言
-    useEffect(() => {
       if (typeof window !== 'undefined') {
         const savedLang = localStorage.getItem('preferred-language') || 'zh';
         setLanguage(savedLang);
@@ -102,7 +98,7 @@
         const welcomeMessage: Message = {
           id: 'welcome',
           type: 'system',
-          content: t('responses.welcome'),
+          content: getText('welcome'),
           timestamp: new Date()
         };
         setMessages([welcomeMessage]);
@@ -155,7 +151,7 @@
         const errorMessage: Message = {
           id: (Date.now() + 1).toString(),
           type: 'system',
-          content: t('errors.networkError'),
+          content: getText('networkError'),
           timestamp: new Date()
         };
         setMessages(prev => [...prev, errorMessage]);
@@ -170,7 +166,7 @@
         const welcomeMessage: Message = {
           id: 'welcome-new',
           type: 'system',
-          content: t('responses.welcome'),
+          content: getText('welcome'),
           timestamp: new Date()
         };
         setMessages([welcomeMessage]);
@@ -196,14 +192,14 @@
     return (
       <Container>
         <Header>
-          <Title>{t('ui.title')}</Title>
-          <Subtitle>{t('ui.subtitle')}</Subtitle>
+          <Title>{getText('title')}</Title>
+          <Subtitle>{getText('subtitle')}</Subtitle>
           <Controls>
             <LanguageButton onClick={toggleLanguage}>
-              {t('ui.languageSwitch')}
+              {getText('langSwitch')}
             </LanguageButton>
             <ClearButton onClick={handleClearMessages}>
-              {t('ui.clearButton')}
+              {getText('clear')}
             </ClearButton>
           </Controls>
         </Header>
@@ -224,7 +220,7 @@
           ))}
           {isLoading && (
             <MessageBubble type="system">
-              <LoadingIndicator>{t('common.processing')}</LoadingIndicator>
+              <LoadingIndicator>{getText('processing')}</LoadingIndicator>
             </MessageBubble>
           )}
           <div ref={messagesEndRef} />
@@ -232,9 +228,9 @@
 
         <InputContainer>
           <ExampleQueries>
-            <ExampleTitle>{t('ui.exampleTitle')}</ExampleTitle>
+            <ExampleTitle>{getText('exampleTitle')}</ExampleTitle>
             <ExampleList>
-              {(translations[language as keyof typeof translations]?.examples || []).map((example, index) => (
+              {getExamples().map((example, index) => (
                 <ExampleItem
                   key={index}
                   onClick={() => handleExampleClick(example)}
@@ -251,7 +247,7 @@
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder={t('ui.inputPlaceholder')}
+              placeholder={getText('placeholder')}
               disabled={isLoading}
               rows={3}
             />
@@ -259,7 +255,7 @@
               onClick={handleSendMessage}
               disabled={!inputText.trim() || isLoading}
             >
-              {isLoading ? t('common.processing') : t('ui.sendButton')}
+              {isLoading ? getText('processing') : getText('send')}
             </SendButton>
           </InputArea>
         </InputContainer>
@@ -268,34 +264,12 @@
   };
 
   // 结果显示组件
-  const ResultsDisplay: React.FC<{ response: any; language: string }> = ({ response, language }) => {
-    const translations = {
-      zh: {
-        'responses.total': '总计',
-        'responses.emissionFactor': '排放因子',
-        'responses.source': '数据来源',
-        'responses.classification': '分类路径',
-        'responses.suggestions': '建议'
-      },
-      en: {
-        'responses.total': 'Total',
-        'responses.emissionFactor': 'Emission Factor',
-        'responses.source': 'Source',
-        'responses.classification': 'Classification',
-        'responses.suggestions': 'Suggestions'
-      }
-    };
-
-    const t = (key: string) => {
-      return translations[language as keyof typeof translations]?.[key as keyof typeof translations.zh] || key;
-    };
-
-    // 安全显示数值
-    const safeToFixed = (value: number | null | undefined, digits: number = 3): string => {
+  const ResultsDisplay = ({ response, language }: { response: any; language: string }) => {
+    const safeToFixed = (value: number) => {
       if (value === null || value === undefined || isNaN(value)) {
-        return '0.' + '0'.repeat(digits);
+        return '0.000';
       }
-      return value.toFixed(digits);
+      return value.toFixed(3);
     };
 
     if (!response || !response.results || !Array.isArray(response.results)) {
@@ -310,29 +284,26 @@
               🔍 {result.entity?.name || 'Unknown'}: {safeToFixed(result.totalEmission)} kg CO2
             </ResultHeader>
 
-            {/* 计算公式 */}
             {result.calculation?.formula && (
               <ResultFormula>
                 📊 {language === 'zh' ? '计算公式' : 'Formula'}: {result.calculation.formula}
               </ResultFormula>
             )}
 
-            {/* 排放因子详情 */}
             <ResultDetails>
               <DetailItem>
-                🏭 {t('responses.emissionFactor')}: {result.emissionFactor?.factor || 'N/A'}
+                🏭 {language === 'zh' ? '排放因子' : 'Emission Factor'}: {result.emissionFactor?.factor || 'N/A'}
   {result.emissionFactor?.unit || ''}
               </DetailItem>
               <DetailItem>
-                📚 {t('responses.source')}: {result.emissionFactor?.source || 'N/A'}
+                📚 {language === 'zh' ? '数据来源' : 'Source'}: {result.emissionFactor?.source || 'N/A'}
               </DetailItem>
               <DetailItem>
-                🏷️ {t('responses.classification')}: {result.emissionFactor?.sector || 'N/A'}
+                🏷️ {language === 'zh' ? '分类路径' : 'Classification'}: {result.emissionFactor?.sector || 'N/A'}
                 {result.emissionFactor?.subsector && ` > ${result.emissionFactor.subsector}`}
               </DetailItem>
             </ResultDetails>
 
-            {/* 计算步骤 */}
             {result.calculation?.steps && result.calculation.steps.length > 0 && (
               <CalculationSteps>
                 <StepsTitle>📋 {language === 'zh' ? '计算步骤' : 'Calculation Steps'}:</StepsTitle>
@@ -342,7 +313,6 @@
               </CalculationSteps>
             )}
 
-            {/* 备注 */}
             {result.notes && result.notes.length > 0 && (
               <ResultNotes>
                 <NotesTitle>💡 {language === 'zh' ? '备注' : 'Notes'}:</NotesTitle>
@@ -354,24 +324,21 @@
           </ResultItem>
         ))}
 
-        {/* 总计 */}
         {response.totalEmission && response.totalEmission > 0 && (
           <TotalEmission>
-            🌍 {t('responses.total')}: {safeToFixed(response.totalEmission)} kg CO2
+            🌍 {language === 'zh' ? '总计' : 'Total'}: {safeToFixed(response.totalEmission)} kg CO2
           </TotalEmission>
         )}
 
-        {/* 建议 */}
         {response.suggestions && response.suggestions.length > 0 && (
           <SuggestionsContainer>
-            <SuggestionTitle>💚 {t('responses.suggestions')}:</SuggestionTitle>
+            <SuggestionTitle>💚 {language === 'zh' ? '建议' : 'Suggestions'}:</SuggestionTitle>
             {response.suggestions.map((suggestion: string, index: number) => (
               <SuggestionItem key={index}>• {suggestion}</SuggestionItem>
             ))}
           </SuggestionsContainer>
         )}
 
-        {/* 处理时间 */}
         {response.processingTime && (
           <ProcessingTime>
             ⏱️ {language === 'zh' ? '处理时间' : 'Processing Time'}: {response.processingTime}ms
@@ -381,7 +348,7 @@
     );
   };
 
-  // 样式组件
+  // 样式组件保持不变
   const Container = styled.div`
     display: flex;
     flex-direction: column;
@@ -576,7 +543,6 @@
     }
   `;
 
-  // 结果显示样式
   const ResultsContainer = styled.div`
     margin-top: 1rem;
     padding: 1rem;
