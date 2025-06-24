@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
+  const path = require('path');
+  
   const nextConfig = {
     experimental: {
       serverComponentsExternalPackages: ['neo4j-driver'],
@@ -15,6 +17,13 @@
     images: {
       domains: [],
       unoptimized: true
+    },
+    webpack: (config) => {
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        '@': path.resolve(__dirname),
+      };
+      return config;
     }
   }
 
