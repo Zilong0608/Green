@@ -71,8 +71,8 @@ import i18next from 'i18next';
         zh: { translation: zhTranslations },
         en: { translation: enTranslations }
       },
-      lng: 'zh',
-      fallbackLng: 'zh',
+      lng: 'en',
+      fallbackLng: 'en',
       interpolation: { escapeValue: false }
     });
   }

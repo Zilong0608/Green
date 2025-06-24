@@ -47,23 +47,31 @@ export class IntentDetectionEngine {
     return `
 你是一个专业的碳排放评估系统的意图识别模块。你需要分析用户输入，识别意图并提取相关实体信息。
 
-## 关键原则
-**CRITICAL：准确识别用户的实际数量，不要被数据库规格干扰！**
+## 关键原则 - 真正的智能理解
 
-1. **用户实际数量 vs 数据库规格区分**
-   - 用户实际数量：30吨、75公里、5吨 ← 这些是要提取的
-   - 数据库规格：26-32t、50% laden、closed-loop ← 这些不是用户数量
-   - 状态描述：fully loaded、half empty ← 这些是状态，不是数量
+**CRITICAL: 深度理解用户意图，智能推断缺失信息！**
 
-2. **完整场景识别**
-   - 运输场景：[重量] + [车辆类型] + [货物类型] + [距离] + [燃料类型]
-   - 废料处理：[重量] + [废料类型] + [处理方式]
-   - 液体处理：[体积] + [液体类型] + [处理方式]
+1. **智能数量识别**
+   - 明确数量：two planes, 2000km, 15 hours ← 直接提取
+   - 隐含数量：I drive to work ← 推断为1辆车
+   - 集合数量：a fleet of trucks ← 推断为多辆，标记需要具体数量
+   - 避免规格：26-32t (规格范围), 50% laden (状态) ← 不是用户数量
 
-3. **智能实体组合**
-   - 运输：组合为单一实体，包含所有相关信息
-   - 废料：组合废料类型和处理方式
-   - 液体：组合液体类型和体积
+2. **智能信息推断**
+   - 地理推断：Sydney to Melbourne ← 自动推断距离713km
+   - 时间推断：during work hours ← 推断为8小时
+   - 设备推断：computer running ← 推断为电力消耗活动
+   - 用途推断：commute to office ← 推断为日常通勤
+
+3. **上下文语义理解**
+   - 不硬编码设备类型，理解任何用户提到的具体设备
+   - 识别活动类型：运输、能耗、制造、废料处理等
+   - 推断缺失的关键信息并标记
+
+4. **智能实体构建**
+   - 保持用户原始描述的完整性
+   - 提取可计算的核心信息
+   - 智能标记需要补充的信息
 
 ## 输出格式
 严格按照以下JSON格式输出：
@@ -240,7 +248,7 @@ Output:
       "originalText": "30-ton rigid diesel truck to transport shipping containers across a 75km route",
       "entityType": "transport",
       "scenarioDetails": {
-        "vehicleType": "rigid diesel truck",
+        "vehicleType": "rigid diesel truck", 
         "cargoType": "shipping containers",
         "fuelType": "diesel",
         "distance": 75,
@@ -252,6 +260,191 @@ Output:
   "missingInfo": [],
   "confidence": 0.95,
   "originalQuery": "Michael operates a 30-ton rigid diesel truck to transport shipping containers across a 75km route"
+}
+
+### Example 2: Multiple Vehicles Scenario - CRITICAL PATTERN
+User Input: "In the fleet of ABC Logistics Company, there are two diesel refrigerated heavy-duty trucks. They travel 2,000 kilometers per month under an average laden for cold chain food delivery."
+Output:
+{
+  "intent": "carbon_calculation",
+  "entities": [
+    {
+      "name": "two diesel refrigerated heavy-duty trucks cold chain food delivery 2000 kilometers",
+      "quantity": 2,
+      "unit": "vehicles",
+      "confidence": 0.95,
+      "originalText": "two diesel refrigerated heavy-duty trucks travel 2,000 kilometers",
+      "entityType": "transport",
+      "scenarioDetails": {
+        "vehicleType": "HGV refrigerated diesel",
+        "cargoType": "cold chain food",
+        "fuelType": "diesel",
+        "distance": 2000,
+        "distanceUnit": "km",
+        "loadStatus": "average laden",
+        "vehicleCount": 2,
+        "timeframe": "per month"
+      }
+    }
+  ],
+  "missingInfo": [],
+  "confidence": 0.95,
+  "originalQuery": "In the fleet of ABC Logistics Company, there are two diesel refrigerated heavy-duty trucks. They travel 2,000 kilometers per month under an average laden for cold chain food delivery."
+}
+
+### Example 3: Electricity Consumption - Correct Unit Handling
+User Input: "The factory receives 2000 kWh electricity supplied from the national grid for managed electrical assets."
+Output:
+{
+  "intent": "carbon_calculation",
+  "entities": [
+    {
+      "name": "2000 kWh electricity from national grid",
+      "quantity": 2000,
+      "unit": "kWh",
+      "confidence": 0.95,
+      "originalText": "2000 kWh electricity supplied from the national grid",
+      "entityType": "energy",
+      "scenarioDetails": {
+        "energyType": "electricity",
+        "source": "national grid",
+        "purpose": "managed electrical assets"
+      }
+    }
+  ],
+  "missingInfo": [],
+  "confidence": 0.95,
+  "originalQuery": "The factory receives 2000 kWh electricity supplied from the national grid for managed electrical assets."
+}
+
+### Example 4: Smart Geographic Inference
+User Input: "Two Boeing 737s fly from Sydney to Melbourne"
+Output:
+{
+  "intent": "carbon_calculation",
+  "entities": [
+    {
+      "name": "two Boeing 737s Sydney to Melbourne flight",
+      "quantity": 2,
+      "unit": "vehicles",
+      "confidence": 0.90,
+      "originalText": "Two Boeing 737s fly from Sydney to Melbourne",
+      "entityType": "transport",
+      "scenarioDetails": {
+        "vehicleType": "Boeing 737",
+        "vehicleCategory": "aircraft",
+        "vehicleCount": 2,
+        "route": "Sydney to Melbourne",
+        "distance": 713,
+        "distanceUnit": "km",
+        "inferredInfo": "distance calculated from city pair"
+      }
+    }
+  ],
+  "missingInfo": [],
+  "confidence": 0.90,
+  "originalQuery": "Two Boeing 737s fly from Sydney to Melbourne"
+}
+
+### Example 5: Implicit Quantity Recognition
+User Input: "I drive my Tesla Model 3 to work every day"
+Output:
+{
+  "intent": "carbon_calculation", 
+  "entities": [
+    {
+      "name": "Tesla Model 3 daily commute",
+      "quantity": 1,
+      "unit": "vehicles",
+      "confidence": 0.85,
+      "originalText": "drive my Tesla Model 3 to work every day",
+      "entityType": "transport",
+      "scenarioDetails": {
+        "vehicleType": "Tesla Model 3",
+        "vehicleCategory": "electric car",
+        "vehicleCount": 1,
+        "frequency": "daily",
+        "purpose": "commute",
+        "inferredInfo": "quantity inferred from singular possessive"
+      }
+    }
+  ],
+  "missingInfo": ["commute distance needed for accurate calculation"],
+  "confidence": 0.85,
+  "originalQuery": "I drive my Tesla Model 3 to work every day"
+}
+
+### Example 6: Smart Device Recognition with Time
+User Input: "My MacBook Pro and iPad ran for 8 hours during the meeting"
+Output:
+{
+  "intent": "carbon_calculation",
+  "entities": [
+    {
+      "name": "MacBook Pro 8 hours operation",
+      "quantity": 1,
+      "unit": "devices",
+      "confidence": 0.90,
+      "originalText": "MacBook Pro ran for 8 hours",
+      "entityType": "energy",
+      "scenarioDetails": {
+        "deviceType": "MacBook Pro",
+        "deviceCategory": "laptop",
+        "deviceCount": 1,
+        "operationTime": 8,
+        "timeUnit": "hours",
+        "context": "meeting"
+      }
+    },
+    {
+      "name": "iPad 8 hours operation", 
+      "quantity": 1,
+      "unit": "devices",
+      "confidence": 0.90,
+      "originalText": "iPad ran for 8 hours",
+      "entityType": "energy",
+      "scenarioDetails": {
+        "deviceType": "iPad",
+        "deviceCategory": "tablet",
+        "deviceCount": 1,
+        "operationTime": 8,
+        "timeUnit": "hours",
+        "context": "meeting"
+      }
+    }
+  ],
+  "missingInfo": [],
+  "confidence": 0.90,
+  "originalQuery": "My MacBook Pro and iPad ran for 8 hours during the meeting"
+}
+
+### Example 7: Vague Quantity Handling
+User Input: "Our office has several printers running all day"
+Output:
+{
+  "intent": "carbon_calculation",
+  "entities": [
+    {
+      "name": "office printers all day operation",
+      "quantity": null,
+      "unit": "devices",
+      "confidence": 0.70,
+      "originalText": "several printers running all day",
+      "entityType": "energy",
+      "scenarioDetails": {
+        "deviceType": "printer",
+        "deviceCategory": "office equipment",
+        "quantityDescription": "several",
+        "operationTime": 8,
+        "timeUnit": "hours",
+        "context": "office",
+        "inferredInfo": "all day assumed as 8 work hours"
+      }
+    }
+  ],
+  "missingInfo": ["specific number of printers needed for calculation"],
+  "confidence": 0.70,
+  "originalQuery": "Our office has several printers running all day"
 }
 
 ### Example 2: Waste Processing Scenario

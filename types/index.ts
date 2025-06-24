@@ -30,6 +30,15 @@ export interface QueryEntity {
     fuelType?: string;          // 燃料类型  
     distance?: number;          // 距离数值
     distanceUnit?: string;      // 距离单位
+    weight?: number;            // 重量数值
+    weightUnit?: string;        // 重量单位
+    vehicleCount?: number;      // 车辆数量
+    deviceCount?: number;       // 设备数量
+    deviceType?: string;        // 设备类型
+    operationTime?: number;     // 运行时间
+    timeUnit?: string;          // 时间单位
+    energyConsumption?: number; // 能源消耗
+    energyUnit?: string;        // 能源单位
     wasteType?: string;         // 废料类型
     processingMethod?: string;  // 处理方式
     loadStatus?: string;        // 装载状态

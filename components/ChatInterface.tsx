@@ -16,7 +16,7 @@
     const [inputText, setInputText] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const [isClient, setIsClient] = useState(false);
-    const [language, setLanguage] = useState('zh');
+    const [language, setLanguage] = useState('en');
     const messagesEndRef = useRef<HTMLDivElement>(null);
     const inputRef = useRef<HTMLTextAreaElement>(null);
 
@@ -243,17 +243,61 @@
               🔍 {result.entity?.name || 'Unknown'}: {(result.totalEmission || 0).toFixed(3)} kg CO2
             </div>
 
+            {/* Detailed Calculation Process */}
+            {result.calculation && (
+              <div style={{ 
+                fontSize: '0.9rem', 
+                color: '#444', 
+                background: 'rgba(76, 175, 80, 0.05)', 
+                padding: '0.8rem', 
+                borderRadius: '0.4rem', 
+                marginBottom: '0.8rem',
+                border: '1px solid rgba(76, 175, 80, 0.2)'
+              }}>
+                <div style={{ fontWeight: 'bold', marginBottom: '0.4rem' }}>
+                  🧮 {language === 'zh' ? '计算过程' : 'Calculation Process'}:
+                </div>
+                <div style={{ fontFamily: 'monospace', fontSize: '0.85rem' }}>
+                  {result.calculation.formula || (
+                    `${result.calculation.quantity} ${result.calculation.unit} × ${result.calculation.factor} = ${(result.totalEmission || 0).toFixed(3)} kg CO2`
+                  )}
+                </div>
+                {result.notes && result.notes.length > 0 && (
+                  <div style={{ marginTop: '0.4rem', fontSize: '0.8rem', color: '#666' }}>
+                    💡 {result.notes.join('; ')}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Emission Factor Details */}
             {result.emissionFactor && (
               <div style={{ fontSize: '0.9rem', color: '#555' }}>
-                <div>🏭 {language === 'zh' ? '排放因子' : 'Factor'}: {result.emissionFactor.factor}
-  {result.emissionFactor.unit}</div>
-                <div>📚 {language === 'zh' ? '数据来源' : 'Source'}: {result.emissionFactor.source}</div>
-                <div>🏷️ {language === 'zh' ? '分类' : 'Category'}: {result.emissionFactor.sector}</div>
+                <div>🏭 {language === 'zh' ? '排放因子' : 'Emission Factor'}: {result.emissionFactor.factor} {result.emissionFactor.unit}</div>
+                
+                {/* Sector Classification Path */}
+                {result.emissionFactor.sector && (
+                  <div>🏷️ {language === 'zh' ? '分类路径' : 'Classification Path'}: 
+                    <span style={{ fontWeight: 'bold' }}>{result.emissionFactor.sector}</span>
+                    {result.emissionFactor.subsector && (
+                      <span> → {result.emissionFactor.subsector}</span>
+                    )}
+                    → {result.emissionFactor.title}
+                  </div>
+                )}
+                
+                <div>📚 {language === 'zh' ? '数据来源' : 'Data Source'}: {result.emissionFactor.source}</div>
+                
+                {/* Confidence Level */}
+                {result.confidence && (
+                  <div>📊 {language === 'zh' ? '置信度' : 'Confidence'}: {(result.confidence * 100).toFixed(0)}%</div>
+                )}
               </div>
             )}
           </ResultItem>
         ))}
 
+        {/* Total Emission Summary */}
         {response.totalEmission > 0 && (
           <div style={{
             fontSize: '1.2rem',
@@ -263,9 +307,22 @@
             padding: '1rem',
             background: 'rgba(76, 175, 80, 0.1)',
             borderRadius: '0.5rem',
-            margin: '1rem 0'
+            margin: '1rem 0',
+            border: '2px solid rgba(76, 175, 80, 0.3)'
           }}>
-            🌍 {language === 'zh' ? '总计' : 'Total'}: {response.totalEmission.toFixed(3)} kg CO2
+            🌍 {language === 'zh' ? '总计' : 'Total Emissions'}: {response.totalEmission.toFixed(3)} kg CO2
+          </div>
+        )}
+
+        {/* Processing Time */}
+        {response.processingTime && (
+          <div style={{
+            fontSize: '0.8rem',
+            color: '#777',
+            textAlign: 'right',
+            marginTop: '0.5rem'
+          }}>
+            ⏱️ {language === 'zh' ? '处理时间' : 'Processing Time'}: {response.processingTime}ms
           </div>
         )}
       </ResultsContainer>

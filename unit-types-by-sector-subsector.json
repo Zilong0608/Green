@@ -1,0 +1,860 @@
+{
+  "Agriculture_Hunting_Forestry_Fishing": {
+    "Agricultural & Forestry Support Services and Inputs": [
+      "kg/nzd",
+      "kg/kg",
+      "kg/l",
+      "kg/eur",
+      "kg/m2",
+      "kg/m3",
+      "kg/tonne",
+      "kg/cad",
+      "kg/usd"
+    ],
+    "Crop Production": [
+      "kg/nzd",
+      "kg/kg",
+      "kg/l",
+      "kg/eur",
+      "kg/m2",
+      "kg/m3",
+      "kg/gbp",
+      "kg/cad",
+      "kg/usd"
+    ],
+    "Fishing & Aquaculture": [
+      "kg/nzd",
+      "kg/kg",
+      "kg/l",
+      "kg/eur",
+      "kg/m3",
+      "kg/m2",
+      "kg/gbp",
+      "kg/cad",
+      "kg/usd"
+    ],
+    "Forestry & Wood Products": [
+      "kg/nzd",
+      "kg/kg",
+      "kg/l",
+      "kg/eur",
+      "kg/m3",
+      "kg/m2",
+      "kg/tonne",
+      "kg/cad",
+      "kg/usd"
+    ],
+    "Livestock Farming & Animal Products": [
+      "kg/nzd",
+      "kg/kg",
+      "kg/l",
+      "kg/eur",
+      "kg/m2",
+      "kg/m3",
+      "kg/gbp",
+      "kg/tonne",
+      "kg/cad",
+      "kg/usd"
+    ]
+  },
+  "Buildings_and_Infrastructure": {
+    "Building & Infrastructure Construction": [
+      "kg/nzd",
+      "kg/number",
+      "kg/m2",
+      "kg/kg",
+      "kg/gbp",
+      "kg/cad",
+      "kg/usd"
+    ],
+    "Building Operations & Utilities": [
+      "kg/nzd",
+      "kg/eur",
+      "kg/number",
+      "kg/kg",
+      "kg/m2",
+      "kg/gbp",
+      "kg/cad",
+      "kg/usd"
+    ],
+    "Property Renovation & Maintenance": [
+      "kg/nzd",
+      "kg/eur",
+      "kg/kg",
+      "kg/number",
+      "kg/m2",
+      "kg/gbp",
+      "kg/cad",
+      "kg/usd"
+    ],
+    "Real Estate & Related Services": [
+      "kg/nzd",
+      "kg/m",
+      "kg/number",
+      "kg/m2",
+      "kg/kg",
+      "kg/gbp",
+      "kg/cad",
+      "kg/usd"
+    ]
+  },
+  "Consumer_Goods_and_Services": {
+    "Apparel, Footwear & Home Textiles": [
+      "kg/number",
+      "kg/m2",
+      "kg/tonne",
+      "kg/nzd",
+      "kg/kg",
+      "kg/l",
+      "kg/eur",
+      "kg/gbp",
+      "kg/cad",
+      "kg/usd"
+    ],
+    "Home Appliances & Electronics": [
+      "kg/tonne",
+      "kg/number",
+      "kg/nzd",
+      "kg/kg",
+      "kg/l",
+      "kg/eur",
+      "kg/m2",
+      "kg/gbp",
+      "kg/cad",
+      "kg/usd"
+    ],
+    "Home Furnishings & Decor": [
+      "kg/number",
+      "kg/tonne",
+      "kg/m2",
+      "kg/nzd",
+      "kg/l",
+      "kg/kg",
+      "kg/eur",
+      "kg/gbp",
+      "kg/cad",
+      "kg/usd"
+    ],
+    "Household Consumables & Personal Care": [
+      "kg/number",
+      "kg/tonne",
+      "kg/nzd",
+      "kg/kg",
+      "kg/l",
+      "kg/eur",
+      "kg/m2",
+      "kg/gbp",
+      "kg/cad",
+      "kg/usd"
+    ]
+  },
+  "Education": {
+    "Early Childhood and K-12 Education": [
+      "kg/nzd",
+      "kg/eur",
+      "kg/cad",
+      "kg/usd"
+    ],
+    "General Educational Services and Support": [
+      "kg/nzd",
+      "kg/cad",
+      "kg/usd"
+    ],
+    "Higher Education": [
+      "kg/nzd",
+      "kg/usd"
+    ],
+    "Vocational and Specialized Training": [
+      "kg/nzd",
+      "kg/cad",
+      "kg/usd"
+    ]
+  },
+  "Energy": {
+    "Biofuels": [
+      "kg/tonne",
+      "kg/GJ",
+      "kg/l",
+      "kg/kg",
+      "kg/m3",
+      "kg/kWh",
+      "kg/eur",
+      "kg/MMBTU",
+      "kg/gal (US)",
+      "kg/cad",
+      "kg/usd"
+    ],
+    "Biofuels and Biogenic Gases": [
+      "kg/GJ",
+      "kg/tonne",
+      "kg/kWh",
+      "kg/MMBTU",
+      "kg/gal (US)",
+      "kg/toe",
+      "kg/gbp",
+      "kg/l",
+      "kg/cad",
+      "kg/kg",
+      "kg/usd",
+      "kg/nzd",
+      "kg/eur"
+    ],
+    "Gaseous Fuels (Natural Gas & Industrial Gases)": [
+      "kg/GJ",
+      "kg/tonne",
+      "kg/kWh",
+      "kg/nzd",
+      "kg/eur",
+      "kg/gal (US)",
+      "kg/l",
+      "kg/m2",
+      "kg/cad",
+      "kg/kg",
+      "kg/MMBTU",
+      "kg/m3",
+      "kg/usd",
+      "kg/short ton"
+    ],
+    "Industrial By-product Gases": [
+      "kg/tonne",
+      "kg/GJ",
+      "kg/kg",
+      "kg/l",
+      "kg/m3",
+      "kg/kWh",
+      "kg/eur",
+      "kg/gal (US)",
+      "kg/MMBTU",
+      "kg/cad",
+      "kg/usd",
+      "kg/short ton"
+    ],
+    "Liquid Fossil Fuels": [
+      "kg/GJ",
+      "kg/tonne",
+      "kg/kg",
+      "kg/kWh",
+      "kg/nzd",
+      "kg/eur",
+      "kg/MMBTU",
+      "kg/gal (US)",
+      "kg/toe",
+      "kg/l",
+      "kg/cad",
+      "kg/usd"
+    ],
+    "Liquid Fossil Fuels and Products": [
+      "kg/tonne",
+      "kg/kWh",
+      "kg/MMBTU",
+      "kg/gal (US)",
+      "kg/GJ",
+      "kg/kg",
+      "kg/l",
+      "kg/eur",
+      "kg/usd",
+      "kg/cad",
+      "kg/m2",
+      "kg/gbp"
+    ],
+    "Natural Gas and Liquefied Petroleum Gas (LPG)": [
+      "kg/tonne",
+      "kg/GJ",
+      "kg/m3",
+      "kg/kWh",
+      "kg/nzd",
+      "kg/eur",
+      "kg/gal (US)",
+      "kg/MMBTU",
+      "kg/l",
+      "kg/toe",
+      "kg/kg",
+      "kg/gbp",
+      "kg/cad",
+      "kg/usd",
+      "kg/short ton"
+    ],
+    "Solid Fossil Fuels": [
+      "kg/GJ",
+      "kg/tonne",
+      "kg/m3",
+      "kg/kWh",
+      "kg/nzd",
+      "kg/eur",
+      "kg/MMBTU",
+      "kg/gal (US)",
+      "kg/toe",
+      "kg/l",
+      "kg/m2",
+      "kg/gbp",
+      "kg/kg",
+      "kg/cad",
+      "kg/usd"
+    ],
+    "Solid Fossil Fuels and Products": [
+      "kg/tonne",
+      "kg/m3",
+      "kg/kWh",
+      "kg/nzd",
+      "kg/eur",
+      "kg/MMBTU",
+      "kg/kg",
+      "kg/l",
+      "kg/GJ",
+      "kg/cad",
+      "kg/gal (US)",
+      "kg/toe",
+      "kg/short ton",
+      "kg/usd",
+      "kg/gbp"
+    ],
+    "Waste": [
+      "kg/tonne",
+      "kg/GJ",
+      "kg/kg",
+      "kg/m3",
+      "kg/l",
+      "kg/kWh",
+      "kg/nzd",
+      "kg/eur",
+      "kg/MMBTU",
+      "kg/toe",
+      "kg/m2",
+      "kg/gbp",
+      "kg/cad",
+      "kg/usd",
+      "kg/gal (US)"
+    ],
+    "Waste for Energy": [
+      "kg/GJ",
+      "kg/kWh",
+      "kg/nzd",
+      "kg/eur",
+      "kg/MMBTU",
+      "kg/kg",
+      "kg/tonne",
+      "kg/gal (US)",
+      "kg/l",
+      "kg/usd",
+      "kg/m3",
+      "kg/short ton",
+      "kg/cad",
+      "kg/gbp"
+    ]
+  },
+  "Equipment": {
+    "Information and Communication Technology (ICT) Equipment": [
+      "kg/number",
+      "kg/tonne",
+      "kg/nzd",
+      "kg/eur",
+      "kg/m",
+      "kg/m2",
+      "kg/gbp",
+      "kg/cad",
+      "kg/kg",
+      "kg/kW",
+      "kg/usd"
+    ],
+    "Power Conversion and Management Equipment": [
+      "kg/number",
+      "kg/nzd",
+      "kg/eur",
+      "kg/m",
+      "kg/tonne",
+      "kg/cad",
+      "kg/kW",
+      "kg/tonne-km",
+      "kg/usd"
+    ],
+    "Solar Photovoltaic (PV) System Components": [
+      "kg/number",
+      "kg/nzd",
+      "kg/eur",
+      "kg/m2",
+      "kg/tonne",
+      "kg/cad",
+      "kg/usd"
+    ],
+    "Thermal Management and Water Heating Equipment": [
+      "kg/number",
+      "kg/nzd",
+      "kg/tonne",
+      "kg/gbp",
+      "kg/cad",
+      "kg/m",
+      "kg/kW",
+      "kg/usd"
+    ]
+  },
+  "Health_and_Social_Care": {
+    "Clinical and Ambulatory Healthcare Services": [
+      "kg/nzd",
+      "kg/cad",
+      "kg/usd"
+    ],
+    "Community and Social Support Services": [
+      "kg/nzd",
+      "kg/cad",
+      "kg/usd"
+    ],
+    "Medical Product Manufacturing and Supply": [
+      "kg/nzd",
+      "kg/eur",
+      "kg/gbp",
+      "kg/cad",
+      "kg/usd"
+    ],
+    "Residential and Long-Term Care Facilities": [
+      "kg/nzd",
+      "kg/gbp",
+      "kg/cad",
+      "kg/usd"
+    ]
+  },
+  "Information_and_Communication": {
+    "Advertising Services": [
+      "kg/nzd",
+      "kg/cad",
+      "kg/usd"
+    ],
+    "IT Services & Software": [
+      "kg/nzd",
+      "kg/eur",
+      "kg/cad",
+      "kg/usd"
+    ],
+    "Media, Content & Broadcasting": [
+      "kg/nzd",
+      "kg/cad",
+      "kg/usd"
+    ],
+    "Telecommunications & Network Services": [
+      "kg/nzd",
+      "kg/gbp",
+      "kg/cad",
+      "kg/usd"
+    ]
+  },
+  "Insurance_and_Financial_Services": {
+    "Auxiliary & Professional Support Services": [
+      "kg/nzd",
+      "kg/eur",
+      "kg/cad",
+      "kg/usd"
+    ],
+    "Financial Intermediation & Lending Services": [
+      "kg/nzd",
+      "kg/gbp",
+      "kg/cad",
+      "kg/usd"
+    ],
+    "Insurance & Pension Funding Services": [
+      "kg/nzd",
+      "kg/cad",
+      "kg/usd"
+    ],
+    "Investment & Asset Management Services": [
+      "kg/nzd",
+      "kg/eur",
+      "kg/cad",
+      "kg/usd"
+    ],
+    "Other Financial Transactions & Charges": [
+      "kg/nzd",
+      "kg/cad",
+      "kg/usd"
+    ]
+  },
+  "Land_Use": {
+    "Forest Land Management": [
+      "kg/nzd"
+    ]
+  },
+  "Materials_and_Manufacturing": {
+    "Basic Industrial Chemicals": [
+      "kg/kg",
+      "kg/nzd",
+      "kg/eur",
+      "kg/m3",
+      "kg/m2",
+      "kg/m",
+      "kg/number",
+      "kg/tonne",
+      "kg/gbp",
+      "kg/cad",
+      "kg/usd"
+    ],
+    "Cement and Clinker Production": [
+      "kg/kg",
+      "kg/nzd",
+      "kg/eur",
+      "kg/m3",
+      "kg/m",
+      "kg/m2",
+      "kg/gbp",
+      "kg/tonne",
+      "kg/cad",
+      "kg/usd",
+      "kg/number"
+    ],
+    "Cement and Mineral Products": [
+      "kg/kg",
+      "kg/tonne",
+      "kg/nzd",
+      "kg/eur",
+      "kg/m3",
+      "kg/m",
+      "kg/m2",
+      "kg/number",
+      "kg/gbp",
+      "kg/cad",
+      "kg/usd"
+    ],
+    "Fertilizer Production": [
+      "kg/kg",
+      "kg/nzd",
+      "kg/eur",
+      "kg/m3",
+      "kg/m2",
+      "kg/m",
+      "kg/tonne",
+      "kg/number",
+      "kg/gbp",
+      "kg/cad",
+      "kg/usd"
+    ],
+    "Iron and Steel Manufacturing": [
+      "kg/kg",
+      "kg/nzd",
+      "kg/eur",
+      "kg/m3",
+      "kg/m",
+      "kg/m2",
+      "kg/tonne",
+      "kg/number",
+      "kg/cad",
+      "kg/usd",
+      "kg/gbp"
+    ],
+    "Nitrogenous Chemicals and Fertilizers": [
+      "kg/kg",
+      "kg/tonne",
+      "kg/nzd",
+      "kg/eur",
+      "kg/m3",
+      "kg/m2",
+      "kg/number",
+      "kg/gbp",
+      "kg/cad",
+      "kg/usd",
+      "kg/m"
+    ],
+    "Phosphate and Complex Fertilizers": [
+      "kg/kg",
+      "kg/eur",
+      "kg/m2",
+      "kg/m3",
+      "kg/number",
+      "kg/tonne",
+      "kg/cad",
+      "kg/usd",
+      "kg/nzd",
+      "kg/gbp",
+      "kg/m"
+    ]
+  },
+  "Organizational_Activities": {
+    "Business Support & Administrative Services": [
+      "kg/nzd",
+      "kg/eur",
+      "kg/hour",
+      "kg/gbp",
+      "kg/cad",
+      "kg/usd",
+      "kg/employee-day"
+    ],
+    "Industrial & Infrastructure Services": [
+      "kg/nzd",
+      "kg/eur",
+      "kg/hour",
+      "kg/gbp",
+      "kg/cad",
+      "kg/usd",
+      "kg/employee-day"
+    ],
+    "Professional, Scientific & Technical Services": [
+      "kg/nzd",
+      "kg/eur",
+      "kg/gbp",
+      "kg/cad",
+      "kg/usd"
+    ],
+    "Public Administration & Community Services": [
+      "kg/nzd",
+      "kg/gbp",
+      "kg/cad",
+      "kg/usd"
+    ],
+    "Wholesale Trade & Distribution": [
+      "kg/nzd",
+      "kg/gbp",
+      "kg/cad",
+      "kg/usd"
+    ]
+  },
+  "Refrigerants_and_Fugitive_Gases": {
+    "Chlorofluorocarbons (CFCs)": [
+      "kg/kg"
+    ],
+    "Halons": [
+      "kg/kg"
+    ],
+    "Hydrochlorofluorocarbons (HCFCs)": [
+      "kg/kg"
+    ],
+    "Hydrofluorocarbons (HFCs)": [
+      "kg/kg"
+    ],
+    "Non-Fluorinated Refrigerants and Industrial Fugitive Gases": [
+      "kg/kg"
+    ],
+    "Other Fluorinated Gases": [
+      "kg/kg"
+    ]
+  },
+  "Restaurants_and_Accommodation": {
+    "Full-Service Food and Beverage Establishments": [
+      "kg/usd"
+    ],
+    "General Accommodation Services": [
+      "kg/nzd",
+      "kg/eur",
+      "kg/room-night",
+      "kg/gbp",
+      "kg/usd"
+    ],
+    "Outdoor and Camp Accommodation": [
+      "kg/nzd",
+      "kg/cad",
+      "kg/usd"
+    ],
+    "Specialized and On-Demand Food and Beverage Services": [
+      "kg/nzd",
+      "kg/usd"
+    ]
+  },
+  "Transport": {
+    "Air Transport Services": [
+      "kg/nzd",
+      "kg/eur",
+      "kg/km",
+      "kg/tonne-km",
+      "kg/passenger-km",
+      "kg/gbp",
+      "kg/cad",
+      "kg/ton-mile",
+      "kg/passenger-mile",
+      "kg/usd",
+      "kg/TEU-km",
+      "kg/tonne",
+      "kg/container-moved"
+    ],
+    "Ancillary Transport Services & Equipment": [
+      "kg/nzd",
+      "kg/eur",
+      "kg/mile",
+      "kg/passenger-mile",
+      "kg/tonne-km",
+      "kg/km",
+      "kg/passenger-km",
+      "kg/cad",
+      "kg/ton-mile",
+      "kg/usd",
+      "kg/TEU-km",
+      "kg/tonne",
+      "kg/container-moved",
+      "kg/hour"
+    ],
+    "Direct Transport Operations": [
+      "kg/nzd",
+      "kg/eur",
+      "kg/mile",
+      "kg/passenger-mile",
+      "kg/km",
+      "kg/tonne-km",
+      "kg/passenger-km",
+      "kg/gbp",
+      "kg/cad",
+      "kg/ton-mile",
+      "kg/usd",
+      "kg/hour",
+      "kg/TEU-km",
+      "kg/tonne"
+    ],
+    "Private Vehicle Ownership & Related Services": [
+      "kg/nzd",
+      "kg/eur",
+      "kg/ton-mile",
+      "kg/passenger-mile",
+      "kg/mile",
+      "kg/tonne-km",
+      "kg/passenger-km",
+      "kg/km",
+      "kg/gbp",
+      "kg/cad",
+      "kg/usd",
+      "kg/hour",
+      "kg/TEU-km",
+      "kg/tonne",
+      "kg/container-moved"
+    ],
+    "Rail Transport Services": [
+      "kg/passenger-mile",
+      "kg/mile",
+      "kg/tonne-km",
+      "kg/passenger-km",
+      "kg/km",
+      "kg/ton-mile",
+      "kg/usd",
+      "kg/hour",
+      "kg/TEU-km",
+      "kg/tonne",
+      "kg/nzd",
+      "kg/eur",
+      "kg/cad"
+    ],
+    "Road Transport Services": [
+      "kg/nzd",
+      "kg/km",
+      "kg/tonne-km",
+      "kg/cad",
+      "kg/usd",
+      "kg/ton-mile",
+      "kg/passenger-km",
+      "kg/TEU-km",
+      "kg/tonne",
+      "kg/mile",
+      "kg/eur",
+      "kg/gbp"
+    ],
+    "Transport Equipment & Vehicle Acquisition": [
+      "kg/nzd",
+      "kg/eur",
+      "kg/ton-mile",
+      "kg/mile",
+      "kg/tonne-km",
+      "kg/passenger-km",
+      "kg/km",
+      "kg/gbp",
+      "kg/cad",
+      "kg/usd",
+      "kg/passenger-mile",
+      "kg/TEU-km",
+      "kg/tonne",
+      "kg/container-moved"
+    ],
+    "Transport Infrastructure & Support Services": [
+      "kg/nzd",
+      "kg/eur",
+      "kg/mile",
+      "kg/ton-mile",
+      "kg/km",
+      "kg/tonne-km",
+      "kg/passenger-km",
+      "kg/cad",
+      "kg/usd",
+      "kg/passenger-mile",
+      "kg/TEU-km",
+      "kg/tonne",
+      "kg/container-moved"
+    ],
+    "Water Transport Services": [
+      "kg/nzd",
+      "kg/passenger-mile",
+      "kg/passenger-km",
+      "kg/km",
+      "kg/tonne-km",
+      "kg/gbp",
+      "kg/cad",
+      "kg/usd",
+      "kg/ton-mile",
+      "kg/hour",
+      "kg/TEU-km",
+      "kg/eur",
+      "kg/mile",
+      "kg/tonne",
+      "kg/container-moved"
+    ]
+  },
+  "Waste": {
+    "Biological Treatment of Organic Waste": [
+      "kg/eur",
+      "kg/tonne",
+      "kg/gbp",
+      "kg/cad",
+      "kg/kg",
+      "kg/short ton",
+      "kg/usd"
+    ],
+    "Material-Specific End-of-Life Management": [
+      "kg/nzd",
+      "kg/eur",
+      "kg/tonne",
+      "kg/gbp",
+      "kg/short ton",
+      "kg/usd",
+      "kg/kg"
+    ],
+    "Thermal Treatment & Landfilling": [
+      "kg/eur",
+      "kg/tonne",
+      "kg/gbp",
+      "kg/kg",
+      "kg/short ton",
+      "kg/usd"
+    ],
+    "Waste Collection & General Management Services": [
+      "kg/nzd",
+      "kg/eur",
+      "kg/tonne",
+      "kg/gbp",
+      "kg/kg",
+      "kg/short ton",
+      "kg/usd"
+    ],
+    "Wastewater Treatment": [
+      "kg/eur",
+      "kg/tonne",
+      "kg/cad",
+      "kg/kg",
+      "kg/short ton"
+    ]
+  },
+  "Water": {
+    "Ancillary Services and Utilities": [
+      "kg/nzd",
+      "kg/eur",
+      "kg/usd",
+      "kg/person-year",
+      "kg/tonne"
+    ],
+    "Wastewater Management": [
+      "kg/nzd",
+      "kg/kg",
+      "kg/usd",
+      "kg/tonne"
+    ],
+    "Water Supply and Distribution": [
+      "kg/m3",
+      "kg/usd",
+      "kg/tonne"
+    ],
+    "Water Treatment Processes": [
+      "kg/nzd",
+      "kg/cad",
+      "kg/person-year",
+      "kg/m3"
+    ]
+  }
+}

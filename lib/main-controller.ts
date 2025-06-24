@@ -36,6 +36,95 @@ export class MainController {
       // 重置模块状态
       this.resetModuleStatus();
 
+      // 步骤0: 优先用原始查询直接搜索数据库
+      console.log('步骤0: 原始查询直接搜索数据库...');
+      
+      // 增强的数量提取（提取重量和距离）
+      let extractedQuantity = null;
+      let extractedUnit = null;
+      let extractedWeight = null;
+      let extractedDistance = null;
+      
+      // 提取重量信息
+      const weightMatch = userQuery.match(/(\d+(?:\.\d+)?)\s*(ton|tons|tonne|tonnes|kg)/i);
+      if (weightMatch) {
+        extractedWeight = parseFloat(weightMatch[1]);
+        const weightUnit = weightMatch[2].toLowerCase();
+        console.log(`📊 提取重量信息: ${extractedWeight} ${weightUnit}`);
+        // 主要数量使用重量
+        extractedQuantity = extractedWeight;
+        extractedUnit = weightUnit;
+      }
+      
+      // 提取距离信息
+      const distanceMatch = userQuery.match(/(\d+(?:\.\d+)?)\s*(km|kilometers|kilometres|miles)/i);
+      if (distanceMatch) {
+        extractedDistance = parseFloat(distanceMatch[1]);
+        const distanceUnit = distanceMatch[2].toLowerCase();
+        console.log(`📊 提取距离信息: ${extractedDistance} ${distanceUnit}`);
+        // 如果没有重量，使用距离作为主要数量
+        if (!extractedWeight) {
+          extractedQuantity = extractedDistance;
+          extractedUnit = distanceUnit;
+        }
+      }
+      
+      const originalEntity = {
+        name: userQuery,
+        quantity: extractedQuantity ?? undefined,
+        unit: extractedUnit ?? undefined,
+        confidence: 1.0,
+        originalText: userQuery,
+        entityType: 'transport' as const,  // 默认为transport类型，确保推理引擎正确处理
+        scenarioDetails: {
+          distance: extractedDistance ?? undefined,
+          distanceUnit: distanceMatch?.[2]?.toLowerCase(),
+          weight: extractedWeight ?? undefined,
+          weightUnit: weightMatch?.[2]?.toLowerCase()
+        }
+      };
+      
+      const directSearchResults = await ragEngine.searchActivities(originalEntity, language);
+      
+      if (directSearchResults.length > 0) {
+        console.log(`✅ 原始查询直接命中: 找到${directSearchResults.length}个结果，跳过AI分析`);
+        
+        // 构造简化的意图结果，直接使用原始查询结果
+        const directIntentResult = {
+          intent: 'carbon_calculation' as const,
+          entities: [originalEntity],
+          missingInfo: [],
+          confidence: 1.0,
+          originalQuery: userQuery
+        };
+        
+        const directRagResults = new Map();
+        directRagResults.set(originalEntity.name, directSearchResults);
+        
+        // 直接进入推理计算
+        console.log('步骤3: 推理和计算 (使用直接搜索结果)...');
+        this.moduleStatus.reasoning = 'processing';
+        
+        const finalResponse = await reasoningEngine.processUserRequest(
+          directIntentResult,
+          directRagResults,
+          language
+        );
+        
+        this.moduleStatus.reasoning = 'completed';
+        console.log(`推理完成: 总排放量=${finalResponse.totalEmission}kg CO2`);
+
+        const processingTime = Date.now() - startTime;
+        console.log(`查询处理完成，总耗时: ${processingTime}ms`);
+
+        return {
+          ...finalResponse,
+          processingTime
+        };
+      }
+
+      console.log('❌ 原始查询未找到结果，进入AI智能分析...');
+
       // 步骤1: 意图识别和实体提取
       console.log('步骤1: 意图识别和实体提取...');
       this.moduleStatus.intentDetection = 'processing';
@@ -57,8 +146,8 @@ export class MainController {
         return response;
       }
 
-      // 步骤2: RAG 搜索相关活动
-      console.log('步骤2: RAG 搜索相关活动...');
+      // 步骤2: RAG 搜索相关活动 (使用AI处理后的实体)
+      console.log('步骤2: RAG 搜索相关活动 (AI处理后实体)...');
       this.moduleStatus.rag = 'processing';
       
       const ragResults = await ragEngine.batchSearchActivities(intentResult.entities, language);

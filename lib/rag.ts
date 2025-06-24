@@ -41,35 +41,32 @@ export class RAGEngine {
     try {
       console.log(`🔍 开始搜索实体: "${entity.name}" (类型: ${entity.entityType || 'general'})`);
       
-      // 🎯 Step 0: 对于简短查询，优先进行精确匹配（修复版）
-      const isSimpleQuery = entity.name.split(' ').length <= 15; // 15个词以内认为是简单查询
+      // 🎯 Step 0: 优先进行完整精确匹配（增强版）
+      console.log(`🎯 开始完整匹配搜索: "${entity.name}"`);
       
-      if (isSimpleQuery) {
-        console.log(`🎯 简单查询检测，优先进行数据库精确匹配: "${entity.name}"`);
-        
-        // 增强的精确匹配策略 - 特别处理百分比和特殊字符
-        const exactStrategies = [
-          entity.name,                                        // 原始查询
-          entity.name.trim(),                                 // 去除首尾空格
-          entity.name.replace(/\s*-\s*/g, ' - '),             // 标准化连字符格式  
-          entity.name.replace(/\s*-\s*/g, ' '),               // 移除连字符
-          entity.name.replace(/\s+/g, ' ').trim(),            // 标准化空格
-          entity.name.replace(/\s*\(\s*/g, ' (').replace(/\s*\)\s*/g, ') ').trim(), // 标准化括号
-          entity.name.replace(/\s*%\s*/g, '%'),               // 标准化百分号
-          entity.name.replace(/(\d+)\s*%/g, '$1%'),           // 确保数字和%之间无空格
-          entity.name.toLowerCase(),                          // 全小写
-          entity.name.toLowerCase().replace(/\s*-\s*/g, ' - ') // 小写+标准化连字符
-        ];
+      // 增强的精确匹配策略 - 确保搜索完整字符串，不截断
+      const exactStrategies = [
+        entity.name,                                        // 原始查询（最高优先级）
+        entity.name.trim(),                                 // 去除首尾空格
+        entity.name.replace(/\s+/g, ' ').trim(),            // 标准化空格
+        entity.name.replace(/\s*-\s*/g, '-'),               // 移除连字符周围空格
+        entity.name.replace(/\s*\/\s*/g, '/'),              // 移除斜杠周围空格
+        entity.name.replace(/\s*\(\s*/g, '(').replace(/\s*\)\s*/g, ')'), // 标准化括号
+        entity.name.replace(/\s*%\s*/g, '%'),               // 标准化百分号
+        entity.name.replace(/(\d+)\s*%/g, '$1%'),           // 确保数字和%之间无空格
+        entity.name.replace(/\s*:\s*/g, ':'),               // 标准化冒号
+        entity.name.replace(/\s*,\s*/g, ', '),              // 标准化逗号
+        entity.name.toLowerCase(),                          // 全小写
+        entity.name.toLowerCase().replace(/\s+/g, ' ').trim(), // 小写+标准化空格
+        // 特殊处理带特殊字符的查询
+        entity.name.replace(/[^\w\s\-\/\(\)%:,]/g, '').trim() // 移除特殊字符但保留重要符号
+      ];
         
         for (const strategy of exactStrategies) {
-          console.log(`  🔍 尝试精确匹配: "${strategy}"`);
           const exactMatches = await this.exactMatchSearch(strategy);
+          
           if (exactMatches.length > 0) {
             console.log(`✅ 精确匹配成功 "${strategy}": ${exactMatches.length} 个结果`);
-            console.log(`🎯 找到的条目:`);
-            exactMatches.forEach((match, index) => {
-              console.log(`  ${index + 1}. "${match.title}" - ${match.factor} ${match.unit} (${match.source})`);
-            });
             
             const exactResults = exactMatches.map(activity => ({
               activity,
@@ -89,6 +86,8 @@ export class RAGEngine {
         // 如果精确匹配失败，进行模糊匹配但只返回数据库结果
         console.log(`⚠️ 精确匹配失败，尝试模糊匹配...`);
         const fuzzyMatches = await this.fuzzyMatchSearch(entity.name);
+        
+        
         if (fuzzyMatches.length > 0) {
           console.log(`✅ 模糊匹配找到 ${fuzzyMatches.length} 个结果`);
           const fuzzyResults = fuzzyMatches.map(activity => ({
@@ -107,7 +106,6 @@ export class RAGEngine {
         
         console.log(`⚠️ 数据库精确匹配失败，进入智能推理阶段...`);
         // 继续智能推理流程
-      }
       
       // 根据实体类型选择搜索策略
       let results: RAGResult[] = [];
@@ -886,12 +884,28 @@ export class RAGEngine {
     let candidates: EmissionFactor[] = [];
     
     // 识别实体类型并搜索相关类别
-    if (entityLower.includes('truck') || entityLower.includes('rigid') || entityLower.includes('lorry')) {
+    if (entityLower.includes('train') || entityLower.includes('railway') || entityLower.includes('rail') || 
+        entityLower.includes('locomotive') || entityLower.includes('freight train')) {
+      // 铁路运输类型 - 优先级最高
+      candidates = await this.searchRailwayCategory(entityLower);
+    } else if (entityLower.includes('truck') || entityLower.includes('rigid') || entityLower.includes('lorry')) {
       // 卡车类型
       candidates = await this.searchTruckCategory(entityLower);
+    } else if (entityLower.includes('car') || entityLower.includes('petrol') || entityLower.includes('diesel') && 
+               (entityLower.includes('vehicle') || entityLower.includes('passenger'))) {
+      // 乘用车类型
+      candidates = await this.searchCarCategory(entityLower);
     } else if (entityLower.includes('hgv') || (entityLower.includes('heavy') && entityLower.includes('goods'))) {
       // 重型货运车辆
       candidates = await this.searchHGVCategory(entityLower);
+    } else if (entityLower.includes('flight') || entityLower.includes('air') || entityLower.includes('aviation') ||
+               entityLower.includes('plane') || entityLower.includes('aircraft')) {
+      // 航空运输类型
+      candidates = await this.searchAviationCategory(entityLower);
+    } else if (entityLower.includes('ship') || entityLower.includes('vessel') || entityLower.includes('marine') ||
+               entityLower.includes('cargo ship') || entityLower.includes('ferry')) {
+      // 海运类型
+      candidates = await this.searchMarineCategory(entityLower);
     } else if (entityLower.includes('waste') && (entityLower.includes('recycl') || entityLower.includes('disposal'))) {
       // 废料处理
       candidates = await this.searchWasteCategory(entityLower);
@@ -907,6 +921,252 @@ export class RAGEngine {
     }
     
     return candidates;
+  }
+
+  /**
+   * 搜索铁路类别 - 智能组合搜索
+   */
+  private async searchRailwayCategory(entityLower: string): Promise<EmissionFactor[]> {
+    let results: EmissionFactor[] = [];
+    
+    console.log(`🚂 搜索铁路类别: "${entityLower}"`);
+    
+    // 优先级1：铁路货运（最高优先级，直接匹配运输服务）
+    if (entityLower.includes('freight') || entityLower.includes('cargo')) {
+      if (entityLower.includes('diesel')) {
+        // 直接搜索"rail freight diesel traction"
+        results = await dbManager.findFuzzyMatch('rail freight diesel traction', 30);
+        if (results.length === 0) {
+          results = await dbManager.findFuzzyMatch('rail freight diesel', 30);
+        }
+        if (results.length === 0) {
+          results = await dbManager.findFuzzyMatch('rail freight', 30);
+        }
+      } else {
+        results = await dbManager.findFuzzyMatch('rail freight', 30);
+      }
+    }
+    // 优先级2：机车搜索（仅作为后备）
+    else if (entityLower.includes('locomotive')) {
+      // 优先搜索铁路货运，然后才是机车燃料
+      results = await dbManager.findFuzzyMatch('rail freight diesel traction', 30);
+      if (results.length === 0) {
+        results = await dbManager.findFuzzyMatch('rail freight', 30);
+      }
+      if (results.length === 0) {
+        results = await dbManager.findFuzzyMatch('locomotive', 30);
+      }
+    }
+    // 优先级3：一般铁路搜索
+    else if (entityLower.includes('rail')) {
+      results = await dbManager.findFuzzyMatch('rail freight', 30);
+      if (results.length === 0) {
+        results = await dbManager.findFuzzyMatch('rail', 30);
+      }
+    }
+    // 优先级4：火车搜索
+    else if (entityLower.includes('train')) {
+      results = await dbManager.findFuzzyMatch('rail freight', 30);
+      if (results.length === 0) {
+        results = await dbManager.findFuzzyMatch('train', 30);
+      }
+    }
+    
+    // 特殊过滤：如果提到了建筑材料，优先返回建筑材料运输相关的结果
+    if (entityLower.includes('building materials') || entityLower.includes('construction')) {
+      const buildingResults = results.filter(r => 
+        r.title.toLowerCase().includes('building materials') ||
+        r.title.toLowerCase().includes('construction')
+      );
+      
+      if (buildingResults.length > 0) {
+        console.log(`找到${buildingResults.length}个建筑材料运输专用结果`);
+        results = buildingResults;
+      }
+    }
+    
+    // 过滤铁路运输相关，优先运输操作而非设备制造
+    const filtered = results.filter(r => {
+      const titleLower = r.title.toLowerCase();
+      const sectorLower = r.sector.toLowerCase();
+      
+      // 排除设备制造/采购相关的排放因子
+      if (titleLower.includes('equipment') || titleLower.includes('acquisition') || 
+          titleLower.includes('manufacturing') || r.unit.includes('cad') || 
+          r.unit.includes('usd') || r.unit.includes('eur')) {
+        return false;
+      }
+      
+      // 优先运输操作相关
+      return sectorLower.includes('transport') ||
+             titleLower.includes('rail') ||
+             titleLower.includes('train') ||
+             titleLower.includes('locomotive') ||
+             titleLower.includes('freight')
+    });
+    
+    console.log(`铁路搜索完成: 找到${filtered.length}个结果`);
+    return filtered;
+  }
+
+  /**
+   * 搜索乘用车类别
+   */
+  private async searchCarCategory(entityLower: string): Promise<EmissionFactor[]> {
+    let results: EmissionFactor[] = [];
+    
+    console.log(`🚗 搜索乘用车类别: "${entityLower}"`);
+    
+    // 优先级1：电动/混动车辆
+    if (entityLower.includes('phev') || entityLower.includes('plug-in hybrid')) {
+      results = await dbManager.findFuzzyMatch('plug-in hybrid car', 30);
+      if (results.length === 0) {
+        results = await dbManager.findFuzzyMatch('hybrid car', 30);
+      }
+      if (results.length === 0) {
+        results = await dbManager.findFuzzyMatch('electric car', 30);
+      }
+    } else if (entityLower.includes('hybrid')) {
+      results = await dbManager.findFuzzyMatch('hybrid car', 30);
+    } else if (entityLower.includes('electric') || entityLower.includes('ev')) {
+      results = await dbManager.findFuzzyMatch('electric car', 30);
+    }
+    // 优先级2：MPV/大型车辆
+    else if (entityLower.includes('mpv') || entityLower.includes('minivan')) {
+      results = await dbManager.findFuzzyMatch('mpv', 30);
+      if (results.length === 0) {
+        results = await dbManager.findFuzzyMatch('large car', 30);
+      }
+      if (results.length === 0) {
+        results = await dbManager.findFuzzyMatch('van', 30);
+      }
+    }
+    // 优先级3：按车型大小搜索
+    else if (entityLower.includes('large')) {
+      results = await dbManager.findFuzzyMatch('petrol car large', 30);
+    } else if (entityLower.includes('medium')) {
+      results = await dbManager.findFuzzyMatch('petrol car medium', 30);
+    } else if (entityLower.includes('small')) {
+      results = await dbManager.findFuzzyMatch('petrol car small', 30);
+    } else if (entityLower.includes('luxury')) {
+      results = await dbManager.findFuzzyMatch('petrol car luxury', 30);
+    }
+    // 优先级4：按燃料类型搜索
+    else if (entityLower.includes('petrol')) {
+      results = await dbManager.findFuzzyMatch('petrol car', 30);
+    } else if (entityLower.includes('diesel')) {
+      results = await dbManager.findFuzzyMatch('diesel car', 30);
+    }
+    // 优先级5：一般汽车搜索（更严格的过滤）
+    else if (entityLower.includes('car') || entityLower.includes('vehicle')) {
+      results = await dbManager.findFuzzyMatch('car', 30);
+    }
+    
+    // 特殊过滤：如果提到了乘客，优先返回乘客车辆相关的结果
+    if (entityLower.includes('passenger')) {
+      const passengerResults = results.filter(r => 
+        r.title.toLowerCase().includes('passenger')
+      );
+      
+      if (passengerResults.length > 0) {
+        console.log(`找到${passengerResults.length}个乘客车辆专用结果`);
+        results = passengerResults;
+      }
+    }
+    
+    // 过滤汽车运输相关，严格排除非运输数据
+    const filtered = results.filter(r => {
+      const titleLower = r.title.toLowerCase();
+      const sectorLower = r.sector.toLowerCase();
+      
+      // 必须是运输行业
+      if (!sectorLower.includes('transport')) {
+        return false;
+      }
+      
+      // 排除明显的非车辆数据
+      if (titleLower.includes('carpet') || titleLower.includes('tile') || 
+          titleLower.includes('building') || titleLower.includes('construction') ||
+          titleLower.includes('material') || titleLower.includes('steel') ||
+          titleLower.includes('iron') || titleLower.includes('concrete')) {
+        return false;
+      }
+      
+      // 必须包含车辆相关关键词
+      return titleLower.includes('car') ||
+             titleLower.includes('vehicle') ||
+             titleLower.includes('mpv') ||
+             titleLower.includes('hybrid') ||
+             titleLower.includes('electric') ||
+             titleLower.includes('petrol') ||
+             titleLower.includes('diesel')
+    });
+    
+    console.log(`乘用车搜索完成: 找到${filtered.length}个结果`);
+    return filtered;
+  }
+
+  /**
+   * 搜索航空类别
+   */
+  private async searchAviationCategory(entityLower: string): Promise<EmissionFactor[]> {
+    let results: EmissionFactor[] = [];
+    
+    console.log(`✈️ 搜索航空类别: "${entityLower}"`);
+    
+    // 优先级1：按航程长度搜索
+    if (entityLower.includes('long-haul') || entityLower.includes('international')) {
+      results = await dbManager.findFuzzyMatch('international long-haul flight', 30);
+    } else if (entityLower.includes('short-haul') || entityLower.includes('domestic')) {
+      results = await dbManager.findFuzzyMatch('short-haul flight', 30);
+    }
+    // 优先级2：一般航空搜索
+    else {
+      results = await dbManager.findFuzzyMatch('flight', 30);
+    }
+    
+    // 过滤航空运输相关
+    const filtered = results.filter(r => 
+      r.sector.toLowerCase().includes('transport') ||
+      r.title.toLowerCase().includes('flight') ||
+      r.title.toLowerCase().includes('air') ||
+      r.title.toLowerCase().includes('aviation')
+    );
+    
+    console.log(`航空搜索完成: 找到${filtered.length}个结果`);
+    return filtered;
+  }
+
+  /**
+   * 搜索海运类别
+   */
+  private async searchMarineCategory(entityLower: string): Promise<EmissionFactor[]> {
+    let results: EmissionFactor[] = [];
+    
+    console.log(`🚢 搜索海运类别: "${entityLower}"`);
+    
+    // 优先级1：按船舶类型搜索
+    if (entityLower.includes('cargo ship')) {
+      results = await dbManager.findFuzzyMatch('cargo ship', 30);
+    } else if (entityLower.includes('ferry')) {
+      results = await dbManager.findFuzzyMatch('ferry', 30);
+    }
+    // 优先级2：一般海运搜索
+    else {
+      results = await dbManager.findFuzzyMatch('ship', 30);
+    }
+    
+    // 过滤海运相关
+    const filtered = results.filter(r => 
+      r.sector.toLowerCase().includes('transport') ||
+      r.title.toLowerCase().includes('ship') ||
+      r.title.toLowerCase().includes('vessel') ||
+      r.title.toLowerCase().includes('marine') ||
+      r.title.toLowerCase().includes('ferry')
+    );
+    
+    console.log(`海运搜索完成: 找到${filtered.length}个结果`);
+    return filtered;
   }
 
   /**

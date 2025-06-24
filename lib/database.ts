@@ -87,9 +87,12 @@ export class DatabaseManager {
   async findExactMatch(entityName: string): Promise<EmissionFactor[]> {
     const session = await this.getSession();
     try {
+      console.log(`🔍 精确匹配搜索: "${entityName}"`);
+      
+      // 使用正确的字段名 name 进行查询
       const query = `
         MATCH (a)
-        WHERE toLower(a.name) = toLower($entityName)
+        WHERE a.type = 'Activity' AND toLower(a.name) = toLower($entityName)
         RETURN a.name as title,
                a.emission_factor as factor,
                a.unit_type as unit,
@@ -102,7 +105,15 @@ export class DatabaseManager {
       `;
 
       const result = await session.run(query, { entityName });
-      return this.parseEmissionFactors(result as any);
+      const factors = this.parseEmissionFactors(result);
+      
+      if (factors.length > 0) {
+        console.log(`✅ 精确匹配成功，找到${factors.length}个结果`);
+      } else {
+        console.log(`❌ 精确匹配未找到结果`);
+      }
+      
+      return factors;
     } finally {
       await session.close();
     }
@@ -113,13 +124,15 @@ export class DatabaseManager {
    * 使用 CONTAINS 和 STARTS WITH 进行模糊匹配
    */
   async findFuzzyMatch(entityName: string, limit: number = 10): Promise<EmissionFactor[]> {
-    // 确保 limit 是整数
     limit = Math.floor(limit);
     const session = await this.getSession();
     try {
+      console.log(`🔍 模糊匹配搜索: "${entityName}"`);
+      
+      // 使用正确的字段名 name 进行模糊搜索
       const query = `
         MATCH (a)
-        WHERE toLower(a.name) CONTAINS toLower($entityName)
+        WHERE a.type = 'Activity' AND toLower(a.name) CONTAINS toLower($entityName)
         RETURN a.name as title,
                a.emission_factor as factor,
                a.unit_type as unit,
@@ -127,7 +140,6 @@ export class DatabaseManager {
                a.sector as sector,
                a.subcategory as subsector,
                elementId(a) as id,
-               // 计算相关性评分
                CASE 
                  WHEN toLower(a.name) = toLower($entityName) THEN 1.0
                  WHEN toLower(a.name) STARTS WITH toLower($entityName) THEN 0.9
@@ -142,7 +154,15 @@ export class DatabaseManager {
         entityName, 
         limit: neo4j.int(Math.floor(limit))
       });
-      return this.parseEmissionFactors(result);
+      const factors = this.parseEmissionFactors(result);
+      
+      if (factors.length > 0) {
+        console.log(`✅ 模糊匹配成功，找到${factors.length}个结果`);
+      } else {
+        console.log(`❌ 模糊匹配未找到结果`);
+      }
+      
+      return factors;
     } finally {
       await session.close();
     }
@@ -281,6 +301,59 @@ export class DatabaseManager {
       const activities = this.parseEmissionFactors(activityResult);
 
       return { sectors, activities };
+    } finally {
+      await session.close();
+    }
+  }
+
+  /**
+   * 调试函数：查看数据库中节点的实际字段结构
+   */
+  async debugDatabaseStructure(): Promise<any[]> {
+    const session = await this.getSession();
+    try {
+      // 查询少量节点，查看实际的字段名称
+      const query = `
+        MATCH (a)
+        RETURN keys(a) as allKeys, a as fullNode
+        LIMIT 5
+      `;
+
+      const result = await session.run(query);
+      return result.records.map(record => ({
+        allKeys: record.get('allKeys'),
+        fullNode: record.get('fullNode').properties
+      }));
+    } finally {
+      await session.close();
+    }
+  }
+
+  /**
+   * 调试函数：查找包含特定关键词的所有数据
+   */
+  async debugSearchByKeyword(keyword: string): Promise<any[]> {
+    const session = await this.getSession();
+    try {
+      // 先检查数据库结构
+      console.log('🔍 正在检查数据库字段结构...');
+      const structureInfo = await this.debugDatabaseStructure();
+      console.log('📋 数据库字段结构:', structureInfo);
+
+      // 查询所有包含关键词的节点，返回所有属性
+      const query = `
+        MATCH (a)
+        WHERE ANY(prop IN keys(a) WHERE toLower(toString(a[prop])) CONTAINS toLower($keyword))
+        RETURN keys(a) as allKeys,
+               a as fullNode
+        LIMIT 10
+      `;
+
+      const result = await session.run(query, { keyword });
+      return result.records.map(record => ({
+        allKeys: record.get('allKeys'),
+        fullNode: record.get('fullNode').properties
+      }));
     } finally {
       await session.close();
     }
